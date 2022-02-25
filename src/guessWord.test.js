@@ -4,9 +4,12 @@ import React from "react";
 import { findByTestAttr, storeFactory } from "../test/testUtils";
 import { Provider } from "react-redux";
 
-const setup = (state = {}) => {
+// Activate global mock to make sure that getSecretWord doesn't make network calls
+jest.mock("./actions");
+
+const setup = (initialState = {}) => {
   // TODO: APPLY STATE
-  const store = storeFactory();
+  const store = storeFactory(initialState);
   const wrapper = mount(
     <Provider store={store}>
       <App />
@@ -21,7 +24,7 @@ const setup = (state = {}) => {
   return wrapper;
 };
 
-describe.skip("no words guessed", () => {
+describe("no words guessed", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = setup({
@@ -37,7 +40,7 @@ describe.skip("no words guessed", () => {
   });
 });
 
-describe.skip("some words guessed", () => {
+describe("some words guessed", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = setup({
@@ -58,7 +61,7 @@ describe.skip("some words guessed", () => {
   });
 });
 
-describe.skip("secret word guessed", () => {
+describe("secret word guessed", () => {
   let wrapper;
   beforeEach(() => {
     wrapper = setup({
@@ -81,7 +84,7 @@ describe.skip("secret word guessed", () => {
     expect(guessedWordRows).toHaveLength(3);
   });
 
-  test("displays congrats component", () => {
+  test("displays congrats text", () => {
     const congrats = findByTestAttr(wrapper, "component-congrats");
     expect(congrats.text().length).toBeGreaterThan(0);
   });

@@ -1,5 +1,6 @@
 import { getSecretWord } from "./index";
 import moxios from "moxios";
+import { storeFactory } from "../../test/testUtils";
 
 // How to test an action creator
 /*
@@ -21,6 +22,7 @@ describe("getSecretWord", () => {
   });
 
   test("secretWord is returned", () => {
+    const store = storeFactory();
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -29,7 +31,8 @@ describe("getSecretWord", () => {
       });
     });
 
-    return getSecretWord().then((secretWord) => {
+    return store.dispatch(getSecretWord()).then(() => {
+      const secretWord = store.getState().secretWord;
       expect(secretWord).toBe("party");
     });
   });
